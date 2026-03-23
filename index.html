@@ -70,49 +70,6 @@
       max-width:780px;
     }
 
-    .demoBanner {
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-bottom:14px;
-      padding:12px 14px;
-      border:1px solid rgba(125,211,252,.35);
-      border-radius:16px;
-      background:linear-gradient(180deg, rgba(14,165,233,.16), rgba(14,165,233,.06));
-      box-shadow:var(--shadow);
-    }
-
-    .demoBanner strong {
-      color:#dff6ff;
-      letter-spacing:.04em;
-    }
-
-    .demoPill {
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:6px 10px;
-      border-radius:999px;
-      background:#08111f;
-      border:1px solid rgba(125,211,252,.3);
-      color:#9edfff;
-      font-size:12px;
-      font-weight:800;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-    }
-
-    .demoPill::before {
-      content:'';
-      width:8px;
-      height:8px;
-      border-radius:999px;
-      background:#38bdf8;
-      box-shadow:0 0 10px rgba(56,189,248,.8);
-    }
-
     .toolbar {
       display:flex;
       gap:10px;
@@ -160,13 +117,6 @@
       margin-bottom:16px;
       box-shadow:var(--shadow);
     }
-
-    .demoNote {
-      margin-top:10px;
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.45;
-    }
     .focus label {
       display:block;
       margin-bottom:7px;
@@ -187,20 +137,229 @@
       align-items:start;
     }
 
-    .demoFooter {
+    .memoryWrap {
       margin-top:16px;
-      padding:14px 16px;
-      border-radius:16px;
-      border:1px solid rgba(84,102,138,.28);
-      background:rgba(10,18,32,.7);
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.55;
-      box-shadow:var(--shadow);
+      display:grid;
+      grid-template-columns:minmax(340px, 1.1fr) minmax(340px, 1fr);
+      gap:14px;
+      align-items:start;
     }
 
-    .demoFooter strong {
+    .memoryPanel {
+      background:rgba(18,28,47,.88);
+      border:1px solid var(--panelBorder);
+      border-radius:20px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .memoryHead {
+      padding:14px 14px 10px;
+      border-bottom:1px solid rgba(84,102,138,.28);
+      background:linear-gradient(180deg, rgba(255,255,255,.03), transparent);
+    }
+
+    .memoryHead h2, .memoryHead h3 {
+      margin:0 0 6px;
+      font-size:16px;
+    }
+
+    .memoryMeta {
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.45;
+    }
+
+    .memoryBody {
+      padding:14px;
+    }
+
+    .memoryGrid {
+      display:grid;
+      grid-template-columns:repeat(2, minmax(180px,1fr));
+      gap:12px;
+    }
+
+    .memoryStack {
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .field {
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+
+    .field label {
+      color:var(--muted);
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+
+    .memoryBody input,
+    .memoryBody select,
+    .memoryBody textarea,
+    .memoryBody button {
+      background:#0c1524;
       color:var(--text);
+      border:1px solid #2b3954;
+      border-radius:12px;
+      padding:11px 12px;
+      outline:none;
+      font:inherit;
+    }
+
+    .memoryBody textarea {
+      min-height:92px;
+      resize:vertical;
+    }
+
+    .memoryActions {
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-top:6px;
+    }
+
+    .memoryStatus {
+      margin-top:8px;
+      padding:10px 12px;
+      border-radius:12px;
+      background:rgba(8,17,31,.24);
+      border:1px solid rgba(84,102,138,.28);
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.45;
+    }
+
+    .memoryActions .primary {
+      background:linear-gradient(180deg,#38bdf8,#0ea5e9);
+      color:#08111f;
+      font-weight:800;
+      box-shadow:0 10px 24px rgba(14,165,233,.22);
+    }
+
+    .memoryActions .secondary {
+      background:#132035;
+      color:var(--text);
+      border:1px solid #2f4263;
+    }
+
+    .tagRow {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+
+    .tagChip {
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      border-radius:999px;
+      padding:7px 10px;
+      font-size:12px;
+      color:var(--muted);
+      background:#0d1729;
+      border:1px solid rgba(111,137,184,.22);
+      cursor:pointer;
+      user-select:none;
+    }
+
+    .tagChip.active {
+      color:#08111f;
+      background:#7dd3fc;
+      border-color:#7dd3fc;
+      font-weight:700;
+    }
+
+    .memoryList {
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-top:10px;
+      max-height:620px;
+      overflow:auto;
+      padding-right:4px;
+    }
+
+    .memoryEntry {
+      border:1px solid rgba(84,102,138,.28);
+      border-radius:16px;
+      padding:12px;
+      background:rgba(8,17,31,.28);
+    }
+
+    .memoryEntryHead {
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:flex-start;
+      margin-bottom:8px;
+    }
+
+    .memoryEntryTitle {
+      font-weight:800;
+      font-size:14px;
+    }
+
+    .memoryEntryTime {
+      color:var(--muted);
+      font-size:12px;
+      white-space:nowrap;
+    }
+
+    .memoryTags {
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      margin:8px 0;
+    }
+
+    .memoryTag {
+      padding:4px 8px;
+      border-radius:999px;
+      background:#0d1729;
+      color:var(--muted);
+      border:1px solid rgba(111,137,184,.22);
+      font-size:12px;
+    }
+
+    .memoryBlock {
+      margin-top:8px;
+      color:var(--text);
+      font-size:13px;
+      line-height:1.5;
+    }
+
+    .memoryBlock strong {
+      color:#dbeafe;
+    }
+
+    .retrievalResults {
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-top:12px;
+      max-height:480px;
+      overflow:auto;
+      padding-right:4px;
+    }
+
+    .retrievalCard {
+      border:1px solid rgba(84,102,138,.28);
+      border-radius:14px;
+      padding:11px 12px;
+      background:rgba(8,17,31,.28);
+    }
+
+    .helper {
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.45;
     }
 
     .col {
@@ -451,7 +610,8 @@
     .footGroup { display:flex; gap:10px; flex-wrap:wrap; }
 
     @media (max-width: 980px) {
-      .board { grid-template-columns:1fr; }
+      .board, .memoryWrap { grid-template-columns:1fr; }
+      .memoryGrid { grid-template-columns:1fr; }
       .col { min-height:auto; }
     }
     @media (max-width: 720px) {
@@ -464,14 +624,11 @@
   </style>
 </head>
 <body>
-  <div class="page">
-    <section class="demoBanner" aria-label="Demo environment notice">
-      <div>
-        <div class="demoPill">Demo / Staging</div>
-      </div>
+  <div class='page'>
+    <section class='demoBanner' aria-label='Demo environment notice'>
+      <div><div class='demoPill'>Demo / Staging</div></div>
       <div><strong>Public-safe preview only.</strong> This page uses demo data and is isolated from your real Mission Control and OpenClaw working stack.</div>
     </section>
-
     <header>
       <div>
         <h1>Mission Control Demo</h1>
@@ -494,8 +651,7 @@
 
     <section class="focus">
       <label for="todayFocus">Today Focus</label>
-      <input id="todayFocus" placeholder="Example: Review board layout and walk through sample workflow" />
-      <div class="demoNote">Tip: this demo saves only in your current browser. Resetting the board affects only this public demo copy.</div>
+      <input id="todayFocus" placeholder="Example: Send the 5-user pilot offer for domain shortlist" />
     </section>
 
     <main class="board">
@@ -518,10 +674,93 @@
       </section>
     </main>
 
-    <section class="demoFooter" aria-label="Demo environment details">
-      <strong>Environment:</strong> Public GitHub Pages staging/demo.<br />
-      <strong>Data:</strong> demo sample cards only.<br />
-      <strong>Isolation:</strong> no real memory, credentials, private files, or live operational connections.
+    <section class="memoryWrap">
+      <section class="memoryPanel">
+        <div class="memoryHead">
+          <h2>Daily Memory</h2>
+          <div class="memoryMeta">Raw chronological history by day. Separate from long-term memory and standing rules.</div>
+        </div>
+        <div class="memoryBody memoryStack">
+          <div class="memoryGrid">
+            <div class="field">
+              <label for="memoryDate">Daily log date</label>
+              <input id="memoryDate" type="date" />
+            </div>
+            <div class="field">
+              <label for="memoryBrowseDate">Browse another day</label>
+              <input id="memoryBrowseDate" type="date" />
+            </div>
+          </div>
+
+          <div class="helper" id="memoryFileHint">Stored as one daily record per date, e.g. <code>memory/2026-03-23.md</code> conceptually. In this Mission Control MVP, the browser stores the daily record and its summary entries separately from board cards and long-term memory.</div>
+
+          <div class="memoryGrid">
+            <div class="field">
+              <label for="memoryTimeBlock">Session / time block</label>
+              <input id="memoryTimeBlock" type="text" placeholder="Example: 9:00–10:15 PM" />
+            </div>
+            <div class="field">
+              <label for="memoryProjects">Topics / projects discussed</label>
+              <input id="memoryProjects" type="text" placeholder="Example: Mission Control, Packaging" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Project / topic tags</label>
+            <div class="tagRow" id="memoryTagRow"></div>
+          </div>
+
+          <div class="field">
+            <label for="memoryDecisions">Decisions made</label>
+            <textarea id="memoryDecisions" placeholder="Key decisions from this work block..."></textarea>
+          </div>
+          <div class="field">
+            <label for="memoryActions">Actions taken</label>
+            <textarea id="memoryActions" placeholder="What was implemented, tested, written, changed..."></textarea>
+          </div>
+          <div class="field">
+            <label for="memoryIssues">Issues / problems</label>
+            <textarea id="memoryIssues" placeholder="Problems found, blockers, concerns..."></textarea>
+          </div>
+          <div class="field">
+            <label for="memoryNextSteps">Next steps</label>
+            <textarea id="memoryNextSteps" placeholder="What should happen next..."></textarea>
+          </div>
+
+          <div class="memoryActions">
+            <button class="primary" id="saveMemoryEntryBtn">Add Summary Entry</button>
+            <button class="secondary" id="newMemoryEntryBtn">Clear Entry Form</button>
+            <button class="secondary" id="connectMemoryFolderBtn">Connect memory folder</button>
+            <button class="secondary" id="syncMemoryDayBtn">Sync selected day</button>
+          </div>
+
+          <div class="memoryStatus" id="memoryFsStatus">Demo mode: browser storage only by default. Folder connection is available for local testing, but this public page is intended to stay demo-safe and separate from your real working stack.</div>
+
+          <div>
+            <div class="memoryMeta"><strong id="memoryDayTitle">Entries for selected day</strong></div>
+            <div class="memoryList" id="memoryDayEntries"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="memoryPanel">
+        <div class="memoryHead">
+          <h3>Memory Retrieval</h3>
+          <div class="memoryMeta">Use daily logs first for date-specific and project-specific history questions.</div>
+        </div>
+        <div class="memoryBody memoryStack">
+          <div class="field">
+            <label for="memorySearchQuery">Search daily logs</label>
+            <input id="memorySearchQuery" type="search" placeholder="Example: Browser Control verdict or what happened on 2026-03-22" />
+          </div>
+          <div class="memoryActions">
+            <button class="primary" id="runMemorySearchBtn">Search Logs</button>
+            <button class="secondary" id="showTodayMemoryBtn">Show Today</button>
+          </div>
+          <div class="helper">Retrieval checks date, tags, projects, decisions, actions, issues, and next steps inside daily logs. Daily history stays separate from long-term memory.</div>
+          <div class="retrievalResults" id="memorySearchResults"></div>
+        </div>
+      </section>
     </section>
   </div>
 
@@ -604,7 +843,10 @@
   </div>
 
 <script>
-const KEY='mission-control-demo-v1';
+const KEY='mission-control-demo-v2';
+const MEMORY_KEY='mission-control-demo-daily-memory-v2';
+const MEMORY_DIR_KEY='mission-control-demo-memory-dir-handle-v2';
+const MEMORY_TAGS=['Mission Control','Browser Control','AI Automation','Domaining','Memory','Packaging','Marketing'];
 const DEFAULT_USER_NAME='Demo User';
 const DEFAULT_ASSISTANT_NAME='Bilbo Demo';
 const starter={
@@ -614,19 +856,22 @@ const starter={
     assistantName: DEFAULT_ASSISTANT_NAME
   },
   todo:[
-    {name:'Review demo launch board',project:'Ops',owner:DEFAULT_USER_NAME,priority:2,status:'todo',due:'',progress:'',notes:'Demo-safe sample card only.'},
-    {name:'Prepare sample domain shortlist workflow',project:'Domains',owner:DEFAULT_ASSISTANT_NAME,priority:2,status:'todo',due:'',progress:'',notes:'Placeholder workflow for public demos.'}
+    {name:'Build full monthlies watch list',project:'Ops',owner:DEFAULT_USER_NAME,priority:1,status:'todo',due:'',progress:'',notes:''},
+    {name:'Draft domain shortlist paid pilot offer',project:'Domains',owner:DEFAULT_USER_NAME,priority:1,status:'todo',due:'',progress:'',notes:''}
   ],
   doing:[
-    {name:'Test Mission Control demo layout',project:'Content',owner:DEFAULT_ASSISTANT_NAME,priority:3,status:'doing',due:'',progress:'Demo review in progress',notes:'No live systems connected.'}
+    {name:'Daily morning brief @ 8:15 AM (PDF)',project:'Ops',owner:DEFAULT_ASSISTANT_NAME,priority:2,status:'doing',due:'',progress:'In motion',notes:''}
   ],
   done:[
-    {name:'Created isolated staging board',project:'Ops',owner:DEFAULT_ASSISTANT_NAME,priority:3,status:'done',due:'',progress:'Done',notes:'Uses demo-only sample data.'}
+    {name:'Created Mission Control board',project:'Ops',owner:DEFAULT_ASSISTANT_NAME,priority:3,status:'done',due:'',progress:'Done',notes:''}
   ]
 };
 
 const projectOptions=['Domains','Content','Clients','Ops'];
 let board=load();
+let dailyMemory=loadDailyMemory();
+let memoryDirHandle=null;
+let activeMemoryDate='';
 let modalState={mode:'create', fromCol:'todo', index:null};
 
 function structuredStarter(){
@@ -688,6 +933,264 @@ function save(){
   localStorage.setItem(KEY, JSON.stringify(board));
 }
 
+function todayIso(){
+  const now=new Date();
+  const offset=now.getTimezoneOffset();
+  const local=new Date(now.getTime()-offset*60000);
+  return local.toISOString().slice(0,10);
+}
+
+function loadDailyMemory(){
+  try {
+    const saved=localStorage.getItem(MEMORY_KEY);
+    const parsed=saved ? JSON.parse(saved) : {};
+    return normalizeDailyMemory(parsed);
+  } catch {
+    return {};
+  }
+}
+
+function normalizeDailyMemory(raw={}){
+  const out={};
+  Object.entries(raw || {}).forEach(([date, day])=>{
+    out[date]={
+      date,
+      entries:Array.isArray(day?.entries) ? day.entries.map(entry=>normalizeMemoryEntry(entry)) : []
+    };
+  });
+  return out;
+}
+
+function normalizeMemoryEntry(entry={}){
+  const tags=Array.isArray(entry.tags) ? entry.tags.filter(Boolean) : [];
+  return {
+    createdAt: entry.createdAt || new Date().toISOString(),
+    timeBlock: entry.timeBlock || '',
+    projects: entry.projects || '',
+    tags:[...new Set(tags)],
+    decisions: entry.decisions || '',
+    actions: entry.actions || '',
+    issues: entry.issues || '',
+    nextSteps: entry.nextSteps || ''
+  };
+}
+
+function saveDailyMemory(){
+  localStorage.setItem(MEMORY_KEY, JSON.stringify(dailyMemory));
+}
+
+function ensureDailyLog(date){
+  if(!dailyMemory[date]) dailyMemory[date]={date, entries:[]};
+  return dailyMemory[date];
+}
+
+function formatDateLong(date){
+  if(!date) return 'No date selected';
+  const parts=date.split('-').map(Number);
+  const d=new Date(parts[0], parts[1]-1, parts[2]);
+  return d.toLocaleDateString(undefined,{weekday:'long', year:'numeric', month:'long', day:'numeric'});
+}
+
+function memoryFileName(date){
+  return `${date}.md`;
+}
+
+function entryToMarkdown(entry={}){
+  const tags=(entry.tags || []).map(tag=>`#${tag.replace(/\s+/g,'-')}`).join(' ');
+  return [
+    `## ${entry.timeBlock || 'Session summary'}`,
+    entry.projects ? `**Projects/topics:** ${entry.projects}` : '',
+    tags ? `**Tags:** ${tags}` : '',
+    `**Logged:** ${entry.createdAt || new Date().toISOString()}`,
+    '',
+    `**Decisions made**`,
+    entry.decisions || '—',
+    '',
+    `**Actions taken**`,
+    entry.actions || '—',
+    '',
+    `**Issues / problems**`,
+    entry.issues || '—',
+    '',
+    `**Next steps**`,
+    entry.nextSteps || '—',
+    ''
+  ].filter(Boolean).join('\n');
+}
+
+function dayToMarkdown(date, day){
+  const entries=(day?.entries || []).map(entryToMarkdown).join('\n\n---\n\n');
+  return `# Daily Memory Log - ${date}\n\n> Raw daily history for Mission Control. Separate from long-term memory / standing rules.\n\n${entries || '_No entries yet._'}\n`;
+}
+
+function parseDailyMarkdown(text=''){
+  const lines=text.replace(/\r\n/g,'\n').split('\n');
+  const entries=[];
+  let current=null;
+  let section='';
+  const pushCurrent=()=>{
+    if(!current) return;
+    entries.push(normalizeMemoryEntry(current));
+    current=null;
+    section='';
+  };
+  const append=(value)=>{
+    if(!current || !section) return;
+    current[section]=(current[section] ? `${current[section]}\n${value}` : value).trim();
+  };
+  for(const rawLine of lines){
+    const line=rawLine.trimEnd();
+    if(line.startsWith('## ')){
+      pushCurrent();
+      current={timeBlock:line.slice(3).trim(), tags:[]};
+      continue;
+    }
+    if(!current) continue;
+    if(line.startsWith('**Projects/topics:**')){
+      current.projects=line.replace('**Projects/topics:**','').trim();
+      continue;
+    }
+    if(line.startsWith('**Tags:**')){
+      current.tags=line.replace('**Tags:**','').trim().split(/\s+/).filter(Boolean).map(tag=>tag.replace(/^#/,'').replace(/-/g,' '));
+      continue;
+    }
+    if(line.startsWith('**Logged:**')){
+      current.createdAt=line.replace('**Logged:**','').trim();
+      continue;
+    }
+    if(line==='**Decisions made**'){ section='decisions'; continue; }
+    if(line==='**Actions taken**'){ section='actions'; continue; }
+    if(line==='**Issues / problems**'){ section='issues'; continue; }
+    if(line==='**Next steps**'){ section='nextSteps'; continue; }
+    if(line==='---'){ continue; }
+    if(line.trim()===''){ continue; }
+    append(line);
+  }
+  pushCurrent();
+  return entries;
+}
+
+function setMemoryFsStatus(message){
+  const el=document.getElementById('memoryFsStatus');
+  if(el) el.innerHTML=message;
+}
+
+async function restoreMemoryDirHandle(){
+  if(!('showDirectoryPicker' in window) || !window.indexedDB) return;
+  try {
+    const request=indexedDB.open('mission-control-memory-fs',1);
+    const db=await new Promise((resolve,reject)=>{
+      request.onupgradeneeded=()=>request.result.createObjectStore('handles');
+      request.onsuccess=()=>resolve(request.result);
+      request.onerror=()=>reject(request.error);
+    });
+    const tx=db.transaction('handles','readonly');
+    const store=tx.objectStore('handles');
+    const handle=await new Promise((resolve,reject)=>{
+      const getReq=store.get(MEMORY_DIR_KEY);
+      getReq.onsuccess=()=>resolve(getReq.result || null);
+      getReq.onerror=()=>reject(getReq.error);
+    });
+    db.close();
+    if(handle){
+      const perm=await handle.queryPermission({mode:'readwrite'});
+      memoryDirHandle=handle;
+      setMemoryFsStatus(perm==='granted'
+        ? 'Connected to your real <code>memory/</code> folder. Daily logs can sync to markdown files.'
+        : 'Memory folder handle restored, but write permission still needs approval in the browser.');
+    }
+  } catch {}
+}
+
+async function persistMemoryDirHandle(handle){
+  if(!window.indexedDB) return;
+  const request=indexedDB.open('mission-control-memory-fs',1);
+  const db=await new Promise((resolve,reject)=>{
+    request.onupgradeneeded=()=>request.result.createObjectStore('handles');
+    request.onsuccess=()=>resolve(request.result);
+    request.onerror=()=>reject(request.error);
+  });
+  const tx=db.transaction('handles','readwrite');
+  tx.objectStore('handles').put(handle, MEMORY_DIR_KEY);
+  await new Promise((resolve,reject)=>{
+    tx.oncomplete=()=>resolve();
+    tx.onerror=()=>reject(tx.error);
+  });
+  db.close();
+}
+
+async function ensureMemoryDirPermission(mode='readwrite'){
+  if(!memoryDirHandle) return false;
+  const query=await memoryDirHandle.queryPermission({mode});
+  if(query==='granted') return true;
+  const req=await memoryDirHandle.requestPermission({mode});
+  return req==='granted';
+}
+
+async function connectMemoryFolder(){
+  if(!('showDirectoryPicker' in window)){
+    alert('This browser does not support folder connection. Use a Chromium-based browser to connect the real memory folder.');
+    return;
+  }
+  try {
+    const handle=await window.showDirectoryPicker({mode:'readwrite'});
+    memoryDirHandle=handle;
+    await persistMemoryDirHandle(handle);
+    const hasPerm=await ensureMemoryDirPermission('readwrite');
+    setMemoryFsStatus(hasPerm
+      ? `Connected to <code>${esc(handle.name || 'memory')}</code>. Real daily logs will sync as <code>YYYY-MM-DD.md</code> files.`
+      : 'Connected to folder handle, but write permission was not granted.');
+    const selected=document.getElementById('memoryBrowseDate').value || todayIso();
+    await loadMemoryDayFromFile(selected, true);
+  } catch (err) {
+    if(err && err.name!=='AbortError') console.error(err);
+  }
+}
+
+async function loadMemoryDayFromFile(date, silent=false){
+  if(!memoryDirHandle) return false;
+  const allowed=await ensureMemoryDirPermission('readwrite');
+  if(!allowed){
+    if(!silent) setMemoryFsStatus('Memory folder is connected, but file permission is not granted yet.');
+    return false;
+  }
+  try {
+    const fileHandle=await memoryDirHandle.getFileHandle(memoryFileName(date), {create:false});
+    const file=await fileHandle.getFile();
+    const text=await file.text();
+    dailyMemory[date]={date, entries:parseDailyMarkdown(text)};
+    saveDailyMemory();
+    if(!silent) setMemoryFsStatus(`Loaded <code>${memoryFileName(date)}</code> from your real memory folder.`);
+    return true;
+  } catch (err) {
+    if(err && err.name==='NotFoundError'){
+      if(!silent) setMemoryFsStatus(`No file found yet for <code>${memoryFileName(date)}</code>. It will be created on sync.`);
+      return false;
+    }
+    if(!silent) console.error(err);
+    return false;
+  }
+}
+
+async function syncMemoryDayToFile(date){
+  if(!memoryDirHandle){
+    setMemoryFsStatus('Connect your real <code>memory/</code> folder first to sync markdown files.');
+    return false;
+  }
+  const allowed=await ensureMemoryDirPermission('readwrite');
+  if(!allowed){
+    setMemoryFsStatus('Write permission was not granted for the connected memory folder.');
+    return false;
+  }
+  const day=ensureDailyLog(date);
+  const fileHandle=await memoryDirHandle.getFileHandle(memoryFileName(date), {create:true});
+  const writable=await fileHandle.createWritable();
+  await writable.write(dayToMarkdown(date, day));
+  await writable.close();
+  setMemoryFsStatus(`Synced <code>${memoryFileName(date)}</code> to your real memory folder.`);
+  return true;
+}
+
 function esc(s=''){
   return String(s).replace(/[&<>\"]/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[m]));
 }
@@ -741,6 +1244,162 @@ function ensureProfileSetup(){
     });
   });
   save();
+}
+
+function memoryEntryText(entry={}){
+  return [entry.timeBlock, entry.projects, ...(entry.tags || []), entry.decisions, entry.actions, entry.issues, entry.nextSteps].join(' ').toLowerCase();
+}
+
+function renderMemoryTags(selected=[]){
+  const row=document.getElementById('memoryTagRow');
+  if(!row) return;
+  row.innerHTML='';
+  MEMORY_TAGS.forEach(tag=>{
+    const btn=document.createElement('button');
+    btn.type='button';
+    btn.className=`tagChip ${selected.includes(tag) ? 'active' : ''}`;
+    btn.textContent=tag;
+    btn.addEventListener('click',()=>{
+      const active=btn.classList.toggle('active');
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+    row.appendChild(btn);
+  });
+}
+
+function getSelectedMemoryTags(){
+  return [...document.querySelectorAll('#memoryTagRow .tagChip.active')].map(el=>el.textContent.trim());
+}
+
+function setMemoryForm(entry={}){
+  document.getElementById('memoryTimeBlock').value=entry.timeBlock || '';
+  document.getElementById('memoryProjects').value=entry.projects || '';
+  document.getElementById('memoryDecisions').value=entry.decisions || '';
+  document.getElementById('memoryActions').value=entry.actions || '';
+  document.getElementById('memoryIssues').value=entry.issues || '';
+  document.getElementById('memoryNextSteps').value=entry.nextSteps || '';
+  renderMemoryTags(entry.tags || []);
+}
+
+function clearMemoryForm(){
+  setMemoryForm({});
+}
+
+function getMemoryForm(){
+  return normalizeMemoryEntry({
+    createdAt:new Date().toISOString(),
+    timeBlock:document.getElementById('memoryTimeBlock').value.trim(),
+    projects:document.getElementById('memoryProjects').value.trim(),
+    tags:getSelectedMemoryTags(),
+    decisions:document.getElementById('memoryDecisions').value.trim(),
+    actions:document.getElementById('memoryActions').value.trim(),
+    issues:document.getElementById('memoryIssues').value.trim(),
+    nextSteps:document.getElementById('memoryNextSteps').value.trim()
+  });
+}
+
+async function renderDailyEntries(date){
+  if(memoryDirHandle) await loadMemoryDayFromFile(date, true);
+  const day=ensureDailyLog(date);
+  const title=document.getElementById('memoryDayTitle');
+  const list=document.getElementById('memoryDayEntries');
+  title.textContent=`Entries for ${formatDateLong(date)}`;
+  list.innerHTML='';
+  if(!day.entries.length){
+    const empty=document.createElement('div');
+    empty.className='empty';
+    empty.textContent='No summary entries for this day yet.';
+    list.appendChild(empty);
+    return;
+  }
+  [...day.entries].reverse().forEach(entry=>{
+    const el=document.createElement('div');
+    el.className='memoryEntry';
+    const stamp=new Date(entry.createdAt);
+    const stampText=Number.isNaN(stamp.getTime()) ? '' : stamp.toLocaleString();
+    el.innerHTML=`
+      <div class="memoryEntryHead">
+        <div class="memoryEntryTitle">${esc(entry.projects || 'General work session')}</div>
+        <div class="memoryEntryTime">${esc(entry.timeBlock || stampText || 'Logged entry')}</div>
+      </div>
+      <div class="memoryTags">${(entry.tags || []).map(tag=>`<span class="memoryTag">${esc(tag)}</span>`).join('')}</div>
+      <div class="memoryBlock"><strong>Decisions:</strong> ${esc(entry.decisions || '—')}</div>
+      <div class="memoryBlock"><strong>Actions:</strong> ${esc(entry.actions || '—')}</div>
+      <div class="memoryBlock"><strong>Issues:</strong> ${esc(entry.issues || '—')}</div>
+      <div class="memoryBlock"><strong>Next steps:</strong> ${esc(entry.nextSteps || '—')}</div>
+    `;
+    list.appendChild(el);
+  });
+}
+
+function runMemorySearch(){
+  const query=(document.getElementById('memorySearchQuery').value || '').trim().toLowerCase();
+  const resultsEl=document.getElementById('memorySearchResults');
+  resultsEl.innerHTML='';
+  let matches=[];
+  Object.values(dailyMemory).forEach(day=>{
+    day.entries.forEach(entry=>{
+      const haystack=`${day.date} ${memoryEntryText(entry)}`;
+      if(!query || haystack.includes(query)) matches.push({date:day.date, entry});
+    });
+  });
+  matches.sort((a,b)=>(`${b.date}${b.entry.createdAt}`).localeCompare(`${a.date}${a.entry.createdAt}`));
+  if(!matches.length){
+    const empty=document.createElement('div');
+    empty.className='empty';
+    empty.textContent=query ? 'No daily log matches found.' : 'No daily logs yet.';
+    resultsEl.appendChild(empty);
+    return;
+  }
+  matches.forEach(match=>{
+    const card=document.createElement('div');
+    card.className='retrievalCard';
+    card.innerHTML=`
+      <div class="memoryEntryHead">
+        <div class="memoryEntryTitle">${esc(match.entry.projects || 'General work session')}</div>
+        <div class="memoryEntryTime">${esc(match.date)}</div>
+      </div>
+      <div class="memoryTags">${(match.entry.tags || []).map(tag=>`<span class="memoryTag">${esc(tag)}</span>`).join('')}</div>
+      <div class="memoryBlock"><strong>Decisions:</strong> ${esc(match.entry.decisions || '—')}</div>
+      <div class="memoryBlock"><strong>Actions:</strong> ${esc(match.entry.actions || '—')}</div>
+      <div class="memoryBlock"><strong>Issues:</strong> ${esc(match.entry.issues || '—')}</div>
+      <div class="memoryBlock"><strong>Next steps:</strong> ${esc(match.entry.nextSteps || '—')}</div>
+    `;
+    card.addEventListener('click',()=>{
+      activeMemoryDate=match.date;
+      document.getElementById('memoryBrowseDate').value=match.date;
+      renderDailyEntries(match.date);
+    });
+    resultsEl.appendChild(card);
+  });
+}
+
+async function initMemoryUI(){
+  const today=todayIso();
+  activeMemoryDate=today;
+  document.getElementById('memoryDate').value=today;
+  document.getElementById('memoryBrowseDate').value=today;
+  renderMemoryTags();
+  await restoreMemoryDirHandle();
+  await renderDailyEntries(today);
+  runMemorySearch();
+}
+
+async function saveMemoryEntry(){
+  const date=document.getElementById('memoryDate').value || todayIso();
+  const entry=getMemoryForm();
+  if(!entry.projects && !entry.decisions && !entry.actions && !entry.issues && !entry.nextSteps){
+    alert('Please add at least one meaningful summary field before saving a daily memory entry.');
+    return;
+  }
+  ensureDailyLog(date).entries.push(entry);
+  saveDailyMemory();
+  activeMemoryDate=date;
+  document.getElementById('memoryBrowseDate').value=date;
+  await renderDailyEntries(date);
+  if(memoryDirHandle) await syncMemoryDayToFile(date);
+  runMemorySearch();
+  clearMemoryForm();
 }
 
 function render(){
@@ -928,8 +1587,32 @@ document.addEventListener('keydown',e=>{
 document.getElementById('cardColumn').addEventListener('change',e=>{
   document.getElementById('cardStatus').value=e.target.value;
 });
+document.getElementById('saveMemoryEntryBtn').addEventListener('click',()=>{ saveMemoryEntry().catch(console.error); });
+document.getElementById('newMemoryEntryBtn').addEventListener('click',clearMemoryForm);
+document.getElementById('connectMemoryFolderBtn').addEventListener('click',()=>{ connectMemoryFolder().catch(console.error); });
+document.getElementById('syncMemoryDayBtn').addEventListener('click',()=>{
+  const date=document.getElementById('memoryBrowseDate').value || document.getElementById('memoryDate').value || todayIso();
+  syncMemoryDayToFile(date).catch(console.error);
+});
+document.getElementById('memoryBrowseDate').addEventListener('change',e=>{
+  activeMemoryDate=e.target.value || todayIso();
+  renderDailyEntries(activeMemoryDate).catch(console.error);
+});
+document.getElementById('memoryDate').addEventListener('change',e=>{
+  if(!e.target.value) e.target.value=todayIso();
+});
+document.getElementById('runMemorySearchBtn').addEventListener('click',runMemorySearch);
+document.getElementById('memorySearchQuery').addEventListener('input',runMemorySearch);
+document.getElementById('showTodayMemoryBtn').addEventListener('click',()=>{
+  const today=todayIso();
+  activeMemoryDate=today;
+  document.getElementById('memoryDate').value=today;
+  document.getElementById('memoryBrowseDate').value=today;
+  renderDailyEntries(today).catch(console.error);
+});
 
 ensureProfileSetup();
+initMemoryUI().catch(console.error);
 render();
 </script>
 </body>

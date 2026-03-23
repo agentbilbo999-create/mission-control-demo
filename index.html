@@ -1,0 +1,856 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mission Control Demo</title>
+  <style>
+    :root {
+      --bg:#08111f;
+      --bg2:#0e1728;
+      --panel:#121c2f;
+      --panelBorder:#23314a;
+      --text:#eef4ff;
+      --muted:#9eb0ca;
+      --chip:#08111fd1;
+      --shadow:0 18px 44px rgba(0,0,0,.34);
+
+      --priority-1:#ef4444;
+      --priority-2:#f59e0b;
+      --priority-3:#22c55e;
+    }
+
+    * { box-sizing:border-box; }
+    body {
+      margin:0;
+      min-height:100vh;
+      font-family: Inter, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(56,189,248,.12), transparent 28%),
+        radial-gradient(circle at top right, rgba(168,85,247,.12), transparent 26%),
+        linear-gradient(180deg,var(--bg),var(--bg2));
+    }
+
+    button, input, select, textarea { font:inherit; }
+
+    button {
+      cursor:pointer;
+      border:none;
+      border-radius:12px;
+      transition:transform .12s ease, opacity .12s ease, box-shadow .12s ease;
+    }
+    button:hover { transform:translateY(-1px); }
+    button:active { transform:translateY(0); }
+
+    .page {
+      max-width:1520px;
+      margin:0 auto;
+      padding:18px;
+    }
+
+    header {
+      display:flex;
+      justify-content:space-between;
+      gap:14px;
+      align-items:flex-start;
+      flex-wrap:wrap;
+      margin-bottom:14px;
+    }
+
+    h1 {
+      margin:0 0 6px;
+      font-size:28px;
+      letter-spacing:.2px;
+    }
+
+    .meta {
+      color:var(--muted);
+      font-size:13px;
+      max-width:780px;
+    }
+
+    .toolbar {
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .toolbar select,
+    .toolbar button,
+    .toolbar input,
+    .focus input,
+    .modal input,
+    .modal select,
+    .modal textarea {
+      background:#0c1524;
+      color:var(--text);
+      border:1px solid #2b3954;
+      border-radius:12px;
+      padding:11px 12px;
+      outline:none;
+    }
+
+    .toolbar input { min-width:220px; }
+
+    .toolbar button.secondary,
+    .modal .secondary {
+      background:#132035;
+      color:var(--text);
+      border:1px solid #2f4263;
+    }
+
+    .toolbar .primary,
+    .modal .primary {
+      background:linear-gradient(180deg,#38bdf8,#0ea5e9);
+      color:#08111f;
+      font-weight:800;
+      box-shadow:0 10px 24px rgba(14,165,233,.22);
+    }
+
+    .focus {
+      background:rgba(14,23,40,.85);
+      border:1px solid var(--panelBorder);
+      border-radius:18px;
+      padding:14px;
+      margin-bottom:16px;
+      box-shadow:var(--shadow);
+    }
+    .focus label {
+      display:block;
+      margin-bottom:7px;
+      color:var(--muted);
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+    .focus input {
+      width:100%;
+      font-size:15px;
+    }
+
+    .board {
+      display:grid;
+      grid-template-columns:repeat(3, minmax(320px,1fr));
+      gap:14px;
+      align-items:start;
+    }
+
+    .col {
+      background:rgba(18,28,47,.88);
+      border:1px solid var(--panelBorder);
+      border-radius:20px;
+      min-height:520px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .colHead {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:14px 14px 10px;
+      border-bottom:1px solid rgba(84,102,138,.28);
+      background:linear-gradient(180deg, rgba(255,255,255,.03), transparent);
+    }
+
+    .colHead h2 {
+      margin:0;
+      font-size:16px;
+    }
+
+    .count {
+      min-width:28px;
+      padding:4px 9px;
+      border-radius:999px;
+      background:#0d1729;
+      color:var(--muted);
+      font-size:12px;
+      text-align:center;
+      border:1px solid rgba(111,137,184,.22);
+    }
+
+    .list {
+      min-height:390px;
+      padding:12px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .empty {
+      padding:16px;
+      border:1px dashed rgba(120,145,190,.22);
+      border-radius:14px;
+      color:var(--muted);
+      text-align:center;
+      font-size:13px;
+      background:rgba(8,17,31,.24);
+    }
+
+    .list.drop {
+      outline:2px dashed #7dd3fc;
+      outline-offset:-8px;
+      border-radius:16px;
+      background:rgba(125,211,252,.05);
+    }
+
+    .card {
+      position:relative;
+      border:none;
+      border-radius:15px;
+      padding:10px 11px 10px;
+      color:#fff;
+      cursor:pointer;
+      box-shadow:0 12px 24px rgba(0,0,0,.18);
+      min-height:74px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      overflow:hidden;
+      text-align:left;
+    }
+    .card:active { cursor:grabbing; }
+    .card::before {
+      content:'';
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg, rgba(255,255,255,.15), rgba(255,255,255,0));
+      pointer-events:none;
+    }
+
+    .cardTop {
+      position:relative;
+      z-index:1;
+      display:flex;
+      align-items:flex-start;
+      gap:8px;
+    }
+
+    .priorityDot {
+      width:10px;
+      height:10px;
+      border-radius:999px;
+      margin-top:4px;
+      flex:0 0 auto;
+      box-shadow:0 0 0 2px rgba(255,255,255,.2);
+    }
+    .priorityDot.p1 { background:var(--priority-1); }
+    .priorityDot.p2 { background:var(--priority-2); }
+    .priorityDot.p3 { background:var(--priority-3); }
+
+    .cardName {
+      position:relative;
+      z-index:1;
+      margin:0;
+      font-size:14px;
+      font-weight:800;
+      line-height:1.22;
+      letter-spacing:.08px;
+      text-shadow:0 1px 0 rgba(0,0,0,.12);
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+      flex:1;
+    }
+
+    .cardSignals {
+      position:relative;
+      z-index:1;
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      margin-top:8px;
+      margin-left:18px;
+    }
+
+    .chip {
+      font-size:11px;
+      font-weight:400;
+      padding:4px 8px;
+      border-radius:999px;
+      background:var(--chip);
+      color:#ffffff;
+      backdrop-filter:blur(4px);
+      border:1px solid rgba(255,255,255,.22);
+      letter-spacing:.02em;
+      text-transform:uppercase;
+      text-shadow:0 1px 1px rgba(0,0,0,.35);
+    }
+
+    .card.owner-danny.status-todo { background:linear-gradient(145deg, #fb923c, #f97316); }
+    .card.owner-danny.status-doing { background:linear-gradient(145deg, #60a5fa, #2563eb); }
+    .card.owner-danny.status-done { background:linear-gradient(145deg, #4ade80, #16a34a); }
+    .card.owner-bilbo,
+    .card.owner-bilbo.status-todo,
+    .card.owner-bilbo.status-doing,
+    .card.owner-bilbo.status-done { background:linear-gradient(145deg, #fb7185, #e11d48); }
+    .card.owner-other.status-todo { background:linear-gradient(145deg, #f59e0b, #d97706); }
+    .card.owner-other.status-doing { background:linear-gradient(145deg, #c084fc, #7c3aed); }
+    .card.owner-other.status-done { background:linear-gradient(145deg, #34d399, #059669); }
+
+    .colFoot { padding:0 12px 12px; }
+
+    .addBtn {
+      width:100%;
+      padding:12px;
+      border-radius:14px;
+      background:#0d1729;
+      color:var(--text);
+      border:1px dashed #385072;
+      font-weight:700;
+    }
+
+    .overlay {
+      position:fixed;
+      inset:0;
+      background:rgba(2,6,16,.64);
+      backdrop-filter:blur(8px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      z-index:1000;
+    }
+    .overlay.open { display:flex; }
+
+    .modal {
+      width:min(760px, 100%);
+      max-height:min(92vh, 900px);
+      overflow:auto;
+      background:linear-gradient(180deg,#12203a,#0e1728);
+      border:1px solid #2e4367;
+      border-radius:22px;
+      box-shadow:0 28px 60px rgba(0,0,0,.45);
+    }
+
+    .modalHead {
+      position:sticky;
+      top:0;
+      z-index:2;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      padding:16px 18px;
+      border-bottom:1px solid rgba(84,102,138,.28);
+      background:linear-gradient(180deg,#12203a,#12203af2);
+      backdrop-filter:blur(8px);
+    }
+    .modalHead h3 {
+      margin:0;
+      font-size:19px;
+    }
+    .iconBtn {
+      width:38px;
+      height:38px;
+      border-radius:999px;
+      background:#132035;
+      color:var(--text);
+      border:1px solid #2f4263;
+      font-size:18px;
+      line-height:1;
+    }
+
+    .modalBody {
+      padding:18px;
+      display:grid;
+      gap:14px;
+    }
+
+    .field { display:grid; gap:7px; }
+    .field label {
+      font-size:12px;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+    .field textarea { min-height:110px; resize:vertical; }
+
+    .grid {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+    }
+
+    .modalFoot {
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      padding:0 18px 18px;
+    }
+    .footGroup { display:flex; gap:10px; flex-wrap:wrap; }
+
+    @media (max-width: 980px) {
+      .board { grid-template-columns:1fr; }
+      .col { min-height:auto; }
+    }
+    @media (max-width: 720px) {
+      .page { padding:12px; }
+      .grid { grid-template-columns:1fr; }
+      .modalBody, .modalHead, .modalFoot { padding-left:14px; padding-right:14px; }
+      h1 { font-size:24px; }
+      .toolbar input { min-width:160px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div>
+        <h1>Mission Control Demo</h1>
+        <div class="meta">Isolated public demo/staging board. Demo data only, saved in the browser, with no connection to your real Mission Control or OpenClaw runtime.</div>
+      </div>
+      <div class="toolbar">
+        <input id="searchInput" type="search" placeholder="Search cards, notes, owners..." />
+        <select id="projectFilter" title="Filter by project">
+          <option value="all">All projects</option>
+          <option value="Domains">Domains</option>
+          <option value="Content">Content</option>
+          <option value="Clients">Clients</option>
+          <option value="Ops">Ops</option>
+        </select>
+        <button class="primary" id="globalAddBtn">+ Add New Card</button>
+        <button class="secondary" id="exportBtn">Export PDF</button>
+        <button class="secondary" id="resetBtn">Reset Board</button>
+      </div>
+    </header>
+
+    <section class="focus">
+      <label for="todayFocus">Today Focus</label>
+      <input id="todayFocus" placeholder="Example: Send the 5-user pilot offer for domain shortlist" />
+    </section>
+
+    <main class="board">
+      <section class="col">
+        <div class="colHead"><h2>To Do</h2><span class="count" id="count-todo">0</span></div>
+        <div class="list" id="todo"></div>
+        <div class="colFoot"><button class="addBtn" data-default-col="todo">+ Add New Card</button></div>
+      </section>
+
+      <section class="col">
+        <div class="colHead"><h2>Doing</h2><span class="count" id="count-doing">0</span></div>
+        <div class="list" id="doing"></div>
+        <div class="colFoot"><button class="addBtn" data-default-col="doing">+ Add New Card</button></div>
+      </section>
+
+      <section class="col">
+        <div class="colHead"><h2>Done</h2><span class="count" id="count-done">0</span></div>
+        <div class="list" id="done"></div>
+        <div class="colFoot"><button class="addBtn" data-default-col="done">+ Add New Card</button></div>
+      </section>
+    </main>
+  </div>
+
+  <div class="overlay" id="modalOverlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modalHead">
+        <h3 id="modalTitle">Edit Card</h3>
+        <button class="iconBtn" id="closeModalBtn" aria-label="Close dialog">×</button>
+      </div>
+      <div class="modalBody">
+        <div class="field">
+          <label for="cardName">Card name</label>
+          <input id="cardName" type="text" placeholder="Enter task or project name" />
+        </div>
+
+        <div class="grid">
+          <div class="field">
+            <label for="cardColumn">Column</label>
+            <select id="cardColumn">
+              <option value="todo">To Do</option>
+              <option value="doing">Doing</option>
+              <option value="done">Done</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="cardProject">Project</label>
+            <select id="cardProject">
+              <option>Domains</option>
+              <option>Content</option>
+              <option>Clients</option>
+              <option>Ops</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="cardOwner">Owner</label>
+            <select id="cardOwner"></select>
+          </div>
+          <div class="field">
+            <label for="cardPriority">Priority</label>
+            <select id="cardPriority">
+              <option value="1">P1</option>
+              <option value="2">P2</option>
+              <option value="3">P3</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="cardStatus">Status</label>
+            <select id="cardStatus">
+              <option value="todo">To Do</option>
+              <option value="doing">Doing</option>
+              <option value="done">Done</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="cardDue">Due date</label>
+            <input id="cardDue" type="date" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="cardProgress">Progress / status note</label>
+          <input id="cardProgress" type="text" placeholder="Example: waiting on Jamie / ready for review" />
+        </div>
+
+        <div class="field">
+          <label for="cardNotes">Notes</label>
+          <textarea id="cardNotes" placeholder="Add details, context, next steps, blockers, reminders..."></textarea>
+        </div>
+      </div>
+      <div class="modalFoot">
+        <div class="footGroup">
+          <button class="secondary" id="deleteBtn">Delete Card</button>
+        </div>
+        <div class="footGroup">
+          <button class="secondary" id="cancelBtn">Cancel</button>
+          <button class="primary" id="saveBtn">Save Card</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+const KEY='mission-control-demo-v1';
+const DEFAULT_USER_NAME='Demo User';
+const DEFAULT_ASSISTANT_NAME='Bilbo Demo';
+const starter={
+  todayFocus:'',
+  profile:{
+    userName: DEFAULT_USER_NAME,
+    assistantName: DEFAULT_ASSISTANT_NAME
+  },
+  todo:[
+    {name:'Review demo launch board',project:'Ops',owner:DEFAULT_USER_NAME,priority:2,status:'todo',due:'',progress:'',notes:'Demo-safe sample card only.'},
+    {name:'Prepare sample domain shortlist workflow',project:'Domains',owner:DEFAULT_ASSISTANT_NAME,priority:2,status:'todo',due:'',progress:'',notes:'Placeholder workflow for public demos.'}
+  ],
+  doing:[
+    {name:'Test Mission Control demo layout',project:'Content',owner:DEFAULT_ASSISTANT_NAME,priority:3,status:'doing',due:'',progress:'Demo review in progress',notes:'No live systems connected.'}
+  ],
+  done:[
+    {name:'Created isolated staging board',project:'Ops',owner:DEFAULT_ASSISTANT_NAME,priority:3,status:'done',due:'',progress:'Done',notes:'Uses demo-only sample data.'}
+  ]
+};
+
+const projectOptions=['Domains','Content','Clients','Ops'];
+let board=load();
+let modalState={mode:'create', fromCol:'todo', index:null};
+
+function structuredStarter(){
+  return JSON.parse(JSON.stringify(starter));
+}
+
+function getProfileNames(rawProfile={}){
+  return {
+    userName: (rawProfile.userName || DEFAULT_USER_NAME).trim() || DEFAULT_USER_NAME,
+    assistantName: (rawProfile.assistantName || DEFAULT_ASSISTANT_NAME).trim() || DEFAULT_ASSISTANT_NAME,
+  };
+}
+
+function getOwnerOptions(){
+  const profile=getProfileNames(board?.profile || {});
+  return [profile.userName, profile.assistantName];
+}
+
+function normalizeCard(card={}, fallbackCol='todo', profileNames=getProfileNames()){
+  const status = card.status || fallbackCol || 'todo';
+  const ownerOptions = [profileNames.userName, profileNames.assistantName];
+  return {
+    name: card.name || card.text || '',
+    project: projectOptions.includes(card.project) ? card.project : 'Ops',
+    owner: ownerOptions.includes(card.owner) ? card.owner : (card.owner || profileNames.userName),
+    priority: Number(card.priority || 2),
+    status,
+    due: card.due || '',
+    progress: card.progress || '',
+    notes: card.notes || ''
+  };
+}
+
+function normalizeBoard(raw){
+  const base = raw && typeof raw === 'object' ? raw : structuredStarter();
+  const profile = getProfileNames(base.profile || {});
+  return {
+    todayFocus: base.todayFocus || '',
+    profile,
+    todo: (base.todo || []).map(c=>normalizeCard(c,'todo', profile)),
+    doing: (base.doing || []).map(c=>normalizeCard(c,'doing', profile)),
+    done: (base.done || []).map(c=>normalizeCard(c,'done', profile)),
+  };
+}
+
+function load(){
+  try {
+    const saved = localStorage.getItem(KEY);
+    if(saved) return normalizeBoard(JSON.parse(saved));
+    const legacy = localStorage.getItem('mission-control-board-v3') || localStorage.getItem('mission-control-board-v2');
+    if(legacy) return normalizeBoard(JSON.parse(legacy));
+    return normalizeBoard(structuredStarter());
+  } catch {
+    return normalizeBoard(structuredStarter());
+  }
+}
+
+function save(){
+  localStorage.setItem(KEY, JSON.stringify(board));
+}
+
+function esc(s=''){
+  return String(s).replace(/[&<>\"]/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[m]));
+}
+
+function ownerClass(owner=''){
+  const value = owner.toLowerCase();
+  const profile = getProfileNames(board?.profile || {});
+  if (value === profile.userName.toLowerCase()) return 'owner-danny';
+  if (value === profile.assistantName.toLowerCase()) return 'owner-bilbo';
+  return 'owner-other';
+}
+
+function statusClass(status='todo'){
+  return ['todo','doing','done'].includes(status) ? status : 'todo';
+}
+
+function matchesFilters(card){
+  const filter=document.getElementById('projectFilter').value;
+  const search=(document.getElementById('searchInput').value || '').trim().toLowerCase();
+  if(filter!=='all' && card.project!==filter) return false;
+  if(!search) return true;
+  const haystack=[card.name, card.project, card.owner, card.progress, card.notes, card.due, card.status, `p${card.priority}`].join(' ').toLowerCase();
+  return haystack.includes(search);
+}
+
+function renderOwnerOptions(selected){
+  const ownerSelect=document.getElementById('cardOwner');
+  const options=getOwnerOptions();
+  ownerSelect.innerHTML=options.map(name=>`<option>${esc(name)}</option>`).join('');
+  ownerSelect.value = options.includes(selected) ? selected : options[0];
+}
+
+function ensureProfileSetup(){
+  board.profile = getProfileNames(board.profile || {});
+  const needsUser = board.profile.userName === DEFAULT_USER_NAME;
+  const needsAssistant = board.profile.assistantName === DEFAULT_ASSISTANT_NAME;
+  if(!needsUser && !needsAssistant) return;
+
+  const userPrompt = needsUser ? prompt('What should Mission Control call you?', board.profile.userName) : board.profile.userName;
+  const assistantPrompt = needsAssistant ? prompt('What should Mission Control call your assistant?', board.profile.assistantName) : board.profile.assistantName;
+
+  board.profile.userName = (userPrompt || board.profile.userName || DEFAULT_USER_NAME).trim() || DEFAULT_USER_NAME;
+  board.profile.assistantName = (assistantPrompt || board.profile.assistantName || DEFAULT_ASSISTANT_NAME).trim() || DEFAULT_ASSISTANT_NAME;
+
+  ['todo','doing','done'].forEach(col=>{
+    board[col] = board[col].map(card => {
+      const cloned = {...card};
+      if(cloned.owner === DEFAULT_USER_NAME) cloned.owner = board.profile.userName;
+      if(cloned.owner === DEFAULT_ASSISTANT_NAME) cloned.owner = board.profile.assistantName;
+      return normalizeCard(cloned, col, board.profile);
+    });
+  });
+  save();
+}
+
+function render(){
+  ['todo','doing','done'].forEach(col=>{
+    const el=document.getElementById(col);
+    el.innerHTML='';
+    let visibleCount=0;
+    board[col].forEach((c,i)=>{
+      if(!matchesFilters(c)) return;
+      visibleCount += 1;
+      const dueText=c.due ? c.due : 'No due';
+      const card=document.createElement('button');
+      card.type='button';
+      card.className=`card ${ownerClass(c.owner)} status-${statusClass(c.status || col)}`;
+      card.draggable=true;
+      card.dataset.col=col;
+      card.dataset.idx=i;
+      card.innerHTML=`
+        <div class="cardTop">
+          <span class="priorityDot p${esc(c.priority || 2)}"></span>
+          <p class="cardName">${esc(c.name)}</p>
+        </div>
+        <div class="cardSignals">
+          <span class="chip">${esc(c.owner || 'Danny')}</span>
+          <span class="chip">${esc((c.status || col))}</span>
+          <span class="chip">${esc(dueText)}</span>
+        </div>`;
+      card.addEventListener('dragstart',onDragStart);
+      card.addEventListener('click',()=>openEditModal(col,i));
+      el.appendChild(card);
+    });
+    if(!visibleCount){
+      const empty=document.createElement('div');
+      empty.className='empty';
+      empty.textContent='Nothing visible here yet.';
+      el.appendChild(empty);
+    }
+    document.getElementById(`count-${col}`).textContent=visibleCount;
+  });
+  document.getElementById('todayFocus').value=board.todayFocus || '';
+  wireDrops();
+  save();
+}
+
+function wireDrops(){
+  document.querySelectorAll('.list').forEach(list=>{
+    list.addEventListener('dragover',e=>{ e.preventDefault(); list.classList.add('drop'); });
+    list.addEventListener('dragleave',()=>list.classList.remove('drop'));
+    list.addEventListener('drop',e=>{
+      e.preventDefault();
+      list.classList.remove('drop');
+      const to=list.id;
+      const data=JSON.parse(e.dataTransfer.getData('text/plain'));
+      const [m]=board[data.col].splice(data.idx,1);
+      m.status=to;
+      board[to].push(m);
+      render();
+    });
+  });
+}
+
+function onDragStart(e){
+  e.dataTransfer.setData('text/plain', JSON.stringify({col:e.currentTarget.dataset.col, idx:Number(e.currentTarget.dataset.idx)}));
+}
+
+function openCreateModal(defaultCol='todo'){
+  modalState={mode:'create', fromCol:defaultCol, index:null};
+  document.getElementById('modalTitle').textContent='Create New Card';
+  document.getElementById('deleteBtn').style.display='none';
+  const profile=getProfileNames(board.profile || {});
+  setForm({
+    name:'',
+    project:'Domains',
+    owner:profile.userName,
+    priority:2,
+    status:defaultCol,
+    due:'',
+    progress:'',
+    notes:''
+  });
+  document.getElementById('cardColumn').value=defaultCol;
+  document.getElementById('cardStatus').value=defaultCol;
+  showModal();
+}
+
+function openEditModal(col, idx){
+  const card=board[col][idx];
+  modalState={mode:'edit', fromCol:col, index:idx};
+  document.getElementById('modalTitle').textContent='Edit Card';
+  document.getElementById('deleteBtn').style.display='inline-flex';
+  setForm(card);
+  document.getElementById('cardColumn').value=col;
+  document.getElementById('cardStatus').value=card.status || col;
+  showModal();
+}
+
+function showModal(){
+  const overlay=document.getElementById('modalOverlay');
+  overlay.classList.add('open');
+  overlay.setAttribute('aria-hidden','false');
+  setTimeout(()=>document.getElementById('cardName').focus(), 0);
+}
+
+function closeModal(){
+  const overlay=document.getElementById('modalOverlay');
+  overlay.classList.remove('open');
+  overlay.setAttribute('aria-hidden','true');
+}
+
+function setForm(card){
+  document.getElementById('cardName').value=card.name || '';
+  document.getElementById('cardProject').value=card.project || 'Ops';
+  renderOwnerOptions(card.owner || getOwnerOptions()[0]);
+  document.getElementById('cardPriority').value=String(card.priority || 2);
+  document.getElementById('cardStatus').value=card.status || 'todo';
+  document.getElementById('cardDue').value=card.due || '';
+  document.getElementById('cardProgress').value=card.progress || '';
+  document.getElementById('cardNotes').value=card.notes || '';
+}
+
+function getForm(){
+  return normalizeCard({
+    name:document.getElementById('cardName').value.trim(),
+    project:document.getElementById('cardProject').value,
+    owner:document.getElementById('cardOwner').value,
+    priority:Number(document.getElementById('cardPriority').value),
+    status:document.getElementById('cardStatus').value,
+    due:document.getElementById('cardDue').value,
+    progress:document.getElementById('cardProgress').value.trim(),
+    notes:document.getElementById('cardNotes').value.trim()
+  }, document.getElementById('cardColumn').value);
+}
+
+function saveModal(){
+  const col=document.getElementById('cardColumn').value;
+  const card=getForm();
+  if(!card.name){
+    alert('Please enter a card name.');
+    document.getElementById('cardName').focus();
+    return;
+  }
+  card.status=document.getElementById('cardStatus').value || col;
+
+  if(modalState.mode==='create'){
+    board[col].push(card);
+  } else {
+    const oldCol=modalState.fromCol;
+    const idx=modalState.index;
+    board[oldCol].splice(idx,1);
+    board[col].push(card);
+  }
+  closeModal();
+  render();
+}
+
+function deleteCurrentCard(){
+  if(modalState.mode!=='edit') return;
+  if(!confirm('Delete this card?')) return;
+  board[modalState.fromCol].splice(modalState.index,1);
+  closeModal();
+  render();
+}
+
+document.getElementById('projectFilter').addEventListener('change', render);
+document.getElementById('searchInput').addEventListener('input', render);
+document.getElementById('todayFocus').addEventListener('input',e=>{ board.todayFocus=e.target.value; save(); });
+document.getElementById('resetBtn').addEventListener('click',()=>{
+  if(confirm('Reset board to starter template?')){
+    board=normalizeBoard(structuredStarter());
+    render();
+  }
+});
+document.getElementById('exportBtn').addEventListener('click',()=>window.print());
+document.getElementById('globalAddBtn').addEventListener('click',()=>openCreateModal('todo'));
+document.querySelectorAll('.addBtn').forEach(btn=>btn.addEventListener('click',()=>openCreateModal(btn.dataset.defaultCol || 'todo')));
+document.getElementById('closeModalBtn').addEventListener('click',closeModal);
+document.getElementById('cancelBtn').addEventListener('click',closeModal);
+document.getElementById('saveBtn').addEventListener('click',saveModal);
+document.getElementById('deleteBtn').addEventListener('click',deleteCurrentCard);
+document.getElementById('modalOverlay').addEventListener('click',e=>{ if(e.target.id==='modalOverlay') closeModal(); });
+document.addEventListener('keydown',e=>{
+  const open=document.getElementById('modalOverlay').classList.contains('open');
+  if(e.key==='Escape' && open) closeModal();
+});
+document.getElementById('cardColumn').addEventListener('change',e=>{
+  document.getElementById('cardStatus').value=e.target.value;
+});
+
+ensureProfileSetup();
+render();
+</script>
+</body>
+</html>
